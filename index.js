@@ -14,7 +14,7 @@ app.set('trust proxy', true)
 // app.use(cors())
 // app.use(
 //     cors({
-//         origin: ['https://bms-test.leishan.app.local', 'http://localhost:8887'],
+//         origin: ['http://localhost:8887'],
 //         methods: 'POST, GET, PUT, OPTIONS, DELETE',
 //     })
 // )

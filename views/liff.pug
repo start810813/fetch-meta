@@ -46,7 +46,7 @@ html
             margin-bottom: 15px;
         }
         .button-container button {
-            width: 50%;
+            width: 100%;
         }
         .button-container button:not(:last-of-type) {
             margin-right: 10px;
@@ -64,10 +64,14 @@ html
         .image-container img {
             width: 100%;
         }
+        .hidden {
+            display: none;
+        }
   body
     div.input-container
         input(type=text value="")#sharedUrl
     div.button-container
+        button#liffLoginButton.blue-hollow-button 登入Line
         button#fetchButton.blue-hollow-button 預覽
         button#shareButton.blue-button 分享
     div.og-container

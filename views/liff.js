@@ -41,7 +41,7 @@ function initApp() {
     // check if the user is logged in/out, and disable inappropriate button
     if (liff.isLoggedIn()) {
         document.getElementById('liffLoginButton').classList.add('hidden')
-    } else {}
+    }
 }
 
 function checkIsShareUrl() {
@@ -62,7 +62,6 @@ function checkIsShareUrl() {
 }
 
 function previewUrlInfo(url, isAutoSend = false) {
-    console.log(url)
     fetch('/meta', {
             method: 'POST',
             headers: {
@@ -73,7 +72,6 @@ function previewUrlInfo(url, isAutoSend = false) {
             }),
         })
         .then(function (res) {
-            console.log(res)
             return res.json()
         })
         .then(function (data) {
@@ -104,9 +102,6 @@ function previewUrlInfo(url, isAutoSend = false) {
             if (isAutoSend) {
                 sendFlexMessage(url)
             }
-
-
-            // togglePreviewData();
         })
         .catch(function (error) {
             console.log('parse API error' + error)
@@ -209,20 +204,3 @@ function createFlexMessage(title, description, image, url, aspectRatio) {
 
     return flex
 }
-
-// function sendAlertIfNotInClient() {
-//     alert('This button is unavailable as LIFF is currently being opened in an external browser.');
-// }
-
-// function togglePreviewData() {
-//     toggleElement('previewInfo')
-// }
-
-// function toggleElement(elementId) {
-//     const elem = document.getElementById(elementId);
-//     if (elem.offsetWidth > 0 && elem.offsetHeight > 0) {
-//         elem.style.display = 'none'
-//     } else {
-//         elem.style.display = 'block'
-//     }
-// }

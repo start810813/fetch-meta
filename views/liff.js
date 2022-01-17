@@ -5,7 +5,6 @@ window.onload = function () {
         })
         .then(function (data) {
             const liffId = data.lineLiffId
-            console.log(liffId)
             initLiff(liffId)
         })
         .catch(function (error) {
@@ -63,6 +62,7 @@ function checkIsShareUrl() {
 }
 
 function previewUrlInfo(url, isAutoSend = false) {
+    console.log(url)
     fetch('/meta', {
             method: 'POST',
             headers: {
@@ -73,6 +73,7 @@ function previewUrlInfo(url, isAutoSend = false) {
             }),
         })
         .then(function (res) {
+            console.log(res)
             return res.json()
         })
         .then(function (data) {

@@ -12,8 +12,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/line-liff-share', (req, res, next) => {
     res.render('liff', {
-        title: 'Hey',
-        message: 'Hello there!',
+        title: 'Line Liff Share'
     })
     next()
 })

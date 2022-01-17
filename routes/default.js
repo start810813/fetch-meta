@@ -1,10 +1,27 @@
 import express from 'express'
+import path from 'path'
 import Page from '../controllers/page.js'
 
 const router = express.Router()
+const __dirname = path.resolve(path.dirname(''))
 
 router.get('/', (req, res, next) => {
     res.send('Hi')
+    next()
+})
+
+router.get('/line-liff-share', (req, res, next) => {
+    res.render('liff', {
+        title: 'Hey',
+        message: 'Hello there!',
+    })
+    next()
+})
+
+router.get('/line-id', (req, res, next) => {
+    res.json({
+        lineLiffId: process.env.LINE_LIFF_ID
+    })
     next()
 })
 

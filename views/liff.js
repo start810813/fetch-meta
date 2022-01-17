@@ -101,7 +101,7 @@ function previewUrlInfo(url, isAutoSend = false) {
                 imageContainerHtml.appendChild(newImageHtml)
             }
             if (isAutoSend) {
-                sendFlexMessage()
+                sendFlexMessage(url)
             }
 
 
@@ -115,13 +115,14 @@ function previewUrlInfo(url, isAutoSend = false) {
 
 function addButtonListener() {
     // get preview 
-    document.getElementById('getPreviewButton').addEventListener('click', function () {
-        var url = document.getElementById("sharedUrl").value
+    document.getElementById('fetchButton').addEventListener('click', function () {
+        const url = document.getElementById("sharedUrl").value
         previewUrlInfo(url)
     })
 
-    document.getElementById('shareTargetPicker').addEventListener('click', function () {
-        sendFlexMessage()
+    document.getElementById('shareButton').addEventListener('click', function () {
+        const url = document.getElementById("sharedUrl").value
+        sendFlexMessage(url)
     })
 
     // login call, only when external browser is used
@@ -133,9 +134,9 @@ function addButtonListener() {
     })
 }
 
-function sendFlexMessage() {
+function sendFlexMessage(url) {
     liff.shareTargetPicker([
-        createFlexMessage(ogTitle, ogDescription, ogImage, ogUrl, aspectRatio)
+        createFlexMessage(ogTitle, ogDescription, ogImage, url, aspectRatio)
     ]).then(function (res) {
         liff.closeWindow()
     }).catch(function (error) {
@@ -152,27 +153,27 @@ function createFlexMessage(title, description, image, url, aspectRatio) {
             url: image,
             size: 'full',
             aspectRatio: aspectRatio,
-            aspectMode: cover,
+            aspectMode: 'cover',
             action: {
                 type: 'uri',
                 uri: url
             }
         },
         body: {
-            type: box,
-            layout: vertical,
+            type: 'box',
+            layout: 'vertical',
             contents: [{
                     type: 'text',
                     text: title,
                     weight: 'bold',
-                    size: xl
+                    size: 'xl'
                 },
                 {
-                    type: text,
+                    type: 'text',
                     text: description,
-                    weight: regular,
-                    size: xs,
-                    margin: sm
+                    weight: 'regular',
+                    size: 'xs',
+                    margin: 'sm'
                 }
             ]
         },
@@ -191,8 +192,8 @@ function createFlexMessage(title, description, image, url, aspectRatio) {
                     }
                 },
                 {
-                    type: spacer,
-                    size: sm
+                    type: 'spacer',
+                    size: 'sm'
                 }
             ],
             flex: 0

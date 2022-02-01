@@ -12,11 +12,11 @@ window.onload = function () {
         })
 }
 
-let requestUrl = ''
-let ogTitle = ''
-let ogDescription = ''
-let ogImage = ''
-let aspectRatio = '20:13'
+let requestUrl
+let ogTitle
+let ogDescription
+let ogImage
+let aspectRatio
 // function initializeLiffOrDie(myLiffId) {
 //     if (!myLiffId) {} else {
 //         initializeLiff(myLiffId)
@@ -42,6 +42,25 @@ function initApp() {
     if (liff.isLoggedIn()) {
         document.getElementById('liffLoginButton').classList.add('hidden')
     }
+}
+
+function validUrlInput(url) {
+    if (!url)
+        document.getElementById('sharedUrl').focus()
+    return !!url
+}
+
+function validMetaData() {
+    let valid = true
+    if (requestUrl === undefined) valid = false
+    if (ogTitle === undefined) valid = false
+    if (ogDescription === undefined) valid = false
+    if (ogImage === undefined) valid = false
+    if (aspectRatio === undefined) valid = false
+    if (valid) {
+        document.getElementById('fetchButton').click()
+    }
+    return valid
 }
 
 function checkIsShareUrl() {
@@ -75,11 +94,13 @@ function previewUrlInfo(url, isAutoSend = false) {
             return res.json()
         })
         .then(function (data) {
-            ogTitle = data.ogTitle
-            ogDescription = data.ogDescription
-            ogImage = data.ogImage
-            if (ogImage) {
+            ogTitle = data.ogTitle || ''
+            ogDescription = data.ogDescription || ''
+            ogImage = data.ogImage || ''
+            if (ogImage && ogImage.width && ogImage.width) {
                 aspectRatio = `${ogImage.width}:${ogImage.height}`
+            } else {
+                aspectRatio = '20:13'
             }
 
             const titleHtml = document.getElementById('title')
@@ -113,12 +134,19 @@ function addButtonListener() {
     // get preview 
     document.getElementById('fetchButton').addEventListener('click', function () {
         const url = document.getElementById("sharedUrl").value
-        previewUrlInfo(url)
+        if (validUrlInput(url)) previewUrlInfo(url)
     })
 
     document.getElementById('shareButton').addEventListener('click', function () {
         const url = document.getElementById("sharedUrl").value
-        sendFlexMessage(url)
+        if (validUrlInput(url)) {
+            if (validMetaData()) {
+                sendFlexMessage(url)
+            } else {
+                previewUrlInfo(url)
+                sendFlexMessage(url)
+            }
+        }
     })
 
     // login call, only when external browser is used
@@ -132,17 +160,18 @@ function addButtonListener() {
 
 function sendFlexMessage(url) {
     liff.shareTargetPicker([
-        createFlexMessage(ogTitle, ogDescription, ogImage, url, aspectRatio)
+        createFlexMessage(ogTitle, ogDescription, ogImage.url, url, aspectRatio)
     ]).then(function (res) {
         liff.closeWindow()
     }).catch(function (error) {
+        alert(JSON.stringify(error))
         const shareResultHtml = document.getElementById('shareResult')
         shareResultHtml.textContent = `Sending Failed: ${JSON.stringify(error)}`
     })
 }
 
 function createFlexMessage(title, description, image, url, aspectRatio) {
-    var flexContent = {
+    const flexContent = {
         type: 'bubble',
         hero: {
             type: 'image',
@@ -162,14 +191,16 @@ function createFlexMessage(title, description, image, url, aspectRatio) {
                     type: 'text',
                     text: title,
                     weight: 'bold',
-                    size: 'xl'
+                    size: 'xl',
+                    wrap: true
                 },
                 {
                     type: 'text',
                     text: description,
                     weight: 'regular',
                     size: 'xs',
-                    margin: 'sm'
+                    margin: 'sm',
+                    wrap: true
                 }
             ]
         },
@@ -196,11 +227,10 @@ function createFlexMessage(title, description, image, url, aspectRatio) {
         }
     }
 
-    var flex = {
+    const flex = {
         type: 'flex',
         altText: title,
         contents: flexContent,
     }
-
     return flex
 }

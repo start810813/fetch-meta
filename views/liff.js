@@ -81,6 +81,12 @@ function checkIsShareUrl() {
 }
 
 function previewUrlInfo(url, isAutoSend = false) {
+    const titleHtml = document.getElementById('title')
+    const descriptionHtml = document.getElementById('description')
+    const imageContainerHtml = document.getElementById('imageContainer')
+    const imageHtml = document.getElementById('image')
+
+    titleHtml.textContent = '載入中...'
     fetch('/meta', {
             method: 'POST',
             headers: {
@@ -102,11 +108,6 @@ function previewUrlInfo(url, isAutoSend = false) {
             } else {
                 aspectRatio = '20:13'
             }
-
-            const titleHtml = document.getElementById('title')
-            const descriptionHtml = document.getElementById('description')
-            const imageContainerHtml = document.getElementById('imageContainer')
-            const imageHtml = document.getElementById('image')
             titleHtml.textContent = ogTitle
             descriptionHtml.textContent = ogDescription
 
